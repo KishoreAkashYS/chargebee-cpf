@@ -1,0 +1,151 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Contract Processing Platform - Chargebee</title>
+    <link rel="stylesheet" href="/static/css/styles.css">
+</head>
+<body>
+    <div class="app">
+        <!-- Header -->
+        <header class="header">
+            <div class="container">
+                <div class="header-content">
+                    <h1 class="logo">
+                        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/>
+                            <polyline points="14 2 14 8 20 8"/>
+                        </svg>
+                        Contract Processing Platform
+                    </h1>
+                    <button id="logoutBtn" class="btn btn-ghost" style="display: none;">
+                        Logout
+                    </button>
+                </div>
+            </div>
+        </header>
+
+        <main class="main">
+            <div class="container">
+                <!-- Login Card -->
+                <div id="authCard" class="auth-card">
+                    <div class="card">
+                        <h2>Welcome Back</h2>
+                        <p class="text-muted">Enter your PIN to access the platform</p>
+
+                        <form id="loginForm" class="form">
+                            <div class="form-group">
+                                <label for="pin">PIN</label>
+                                <input 
+                                    type="password" 
+                                    id="pin" 
+                                    class="form-input" 
+                                    placeholder="Enter PIN (default: 12345)"
+                                    autocomplete="off"
+                                />
+                            </div>
+
+                            <button type="submit" class="btn btn-primary btn-block">
+                                Login
+                            </button>
+
+                            <div id="authError" class="error-message" style="display: none;"></div>
+                        </form>
+                    </div>
+                </div>
+
+                <!-- Main Workflow -->
+                <div id="workflow" class="workflow" style="display: none;">
+                    <!-- Upload Section -->
+                    <div class="card">
+                        <div class="card-header">
+                            <h3>1. Upload Contract PDF</h3>
+                        </div>
+                        <div class="card-body">
+                            <div class="upload-area" id="uploadArea">
+                                <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                    <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/>
+                                    <polyline points="17 8 12 3 7 8"/>
+                                    <line x1="12" y1="3" x2="12" y2="15"/>
+                                </svg>
+                                <p>Drop PDF here or click to browse</p>
+                                <input type="file" id="fileInput" accept=".pdf" style="display: none;">
+                            </div>
+
+                            <div id="fileName" class="file-name" style="display: none;"></div>
+
+                            <button id="extractBtn" class="btn btn-primary btn-block" disabled>
+                                <span id="extractBtnText">Extract Data</span>
+                                <span id="extractLoader" class="loader" style="display: none;"></span>
+                            </button>
+
+                            <div id="uploadStatus" class="status-message"></div>
+                        </div>
+                    </div>
+
+                    <!-- Review Section -->
+                    <div class="card">
+                        <div class="card-header">
+                            <h3>2. Review & Edit Extracted Data</h3>
+                            <div class="toggle-group">
+                                <button id="formViewBtn" class="toggle-btn active">Form View</button>
+                                <button id="jsonViewBtn" class="toggle-btn">JSON View</button>
+                            </div>
+                        </div>
+                        <div class="card-body">
+                            <!-- Form View -->
+                            <div id="formView" class="data-view">
+                                <div id="extractedForm">
+                                    <p class="text-muted text-center">Upload and extract a contract to see data here</p>
+                                </div>
+                            </div>
+
+                            <!-- JSON View -->
+                            <div id="jsonView" class="data-view" style="display: none;">
+                                <textarea 
+                                    id="jsonEditor" 
+                                    class="json-editor" 
+                                    placeholder="Extracted data will appear here..."
+                                    spellcheck="false"
+                                ></textarea>
+                            </div>
+
+                            <div class="button-group">
+                                <button id="confirmBtn" class="btn btn-primary" disabled>
+                                    <span id="confirmBtnText">Confirm & Create in Chargebee</span>
+                                    <span id="confirmLoader" class="loader" style="display: none;"></span>
+                                </button>
+                                <button id="resetBtn" class="btn btn-secondary" disabled>Reset</button>
+                            </div>
+
+                            <div id="confirmStatus" class="status-message"></div>
+                        </div>
+                    </div>
+
+                    <!-- History Section -->
+                    <div class="card">
+                        <div class="card-header">
+                            <h3>Processing History</h3>
+                            <button id="refreshHistoryBtn" class="btn btn-sm btn-secondary">Refresh</button>
+                        </div>
+                        <div class="card-body">
+                            <div id="historyList" class="history-list">
+                                <p class="text-muted text-center">No contracts processed yet</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </main>
+
+        <footer class="footer">
+            <div class="container">
+                <p>Contract Processing Platform • Flask + Gemini AI + Chargebee PC2</p>
+            </div>
+        </footer>
+    </div>
+
+    <script src="/static/js/app.js"></script>
+</body>
+</html>

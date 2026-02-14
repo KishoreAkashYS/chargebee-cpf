@@ -1,0 +1,19 @@
+version: '3.8'
+
+services:
+  flask-app:
+    build: .
+    ports:
+      - "5000:5000"
+    env_file:
+      - .env
+    environment:
+      - FLASK_SECRET_KEY=${FLASK_SECRET_KEY}
+      - GOOGLE_API_KEY=${GOOGLE_API_KEY}
+      - CHARGEBEE_SITE=${CHARGEBEE_SITE}
+      - CHARGEBEE_API_KEY=${CHARGEBEE_API_KEY}
+      - CHARGEBEE_ENABLED=${CHARGEBEE_ENABLED}
+      - APP_AUTH_PIN=${APP_AUTH_PIN}
+    volumes:
+      - ./storage:/app/storage
+    restart: unless-stopped

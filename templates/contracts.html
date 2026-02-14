@@ -1,0 +1,450 @@
+{% extends "base.html" %}
+
+{% block title %}Contracts - Contract Processing Platform{% endblock %}
+{% block page_title %}All Contracts{% endblock %}
+
+{% block content %}
+<div class="contracts-container">
+    <!-- Filters & Search -->
+    <div class="filter-bar">
+        <div class="search-box">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <circle cx="11" cy="11" r="8"/>
+                <path d="m21 21-4.35-4.35"/>
+            </svg>
+            <input 
+                type="text" 
+                id="searchInput" 
+                placeholder="Search contracts by filename..."
+                class="search-input"
+            />
+        </div>
+
+        <div class="filter-group">
+            <select id="statusFilter" class="filter-select">
+                <option value="">All Status</option>
+                <option value="extracted">Extracted</option>
+                <option value="confirmed">Confirmed</option>
+            </select>
+
+            <button id="refreshBtn" class="btn btn-secondary">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <path d="M23 4v6h-6"/>
+                    <path d="M20.49 15a9 9 0 1 1-2-8.83"/>
+                </svg>
+                Refresh
+            </button>
+        </div>
+    </div>
+
+    <!-- Contracts Table/Grid -->
+    <div class="contracts-view">
+        <!-- Table View (Desktop) -->
+        <div id="tableView" class="table-container">
+            <table class="contracts-table">
+                <thead>
+                    <tr>
+                        <th>Filename</th>
+                        <th>Date</th>
+                        <th>Status</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+                <tbody id="contractsTableBody">
+                    <tr class="empty-row">
+                        <td colspan="4">
+                            <div class="loading-spinner">
+                                <div class="spinner"></div>
+                                <p>Loading contracts...</p>
+                            </div>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+
+        <!-- Grid View (Mobile) -->
+        <div id="gridView" class="contracts-grid">
+            <div class="loading-spinner">
+                <div class="spinner"></div>
+                <p>Loading contracts...</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- Empty State -->
+    <div id="emptyState" class="empty-state" style="display: none;">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/>
+        </svg>
+        <h3>No Contracts Found</h3>
+        <p>Get started by uploading your first contract</p>
+        <a href="/upload" class="btn btn-primary">Upload Contract</a>
+    </div>
+</div>
+
+<style>
+.contracts-container {
+    display: grid;
+    gap: 1.5rem;
+}
+
+.filter-bar {
+    display: flex;
+    gap: 1rem;
+    background: rgba(30, 41, 59, 0.6);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: 12px;
+    padding: 1rem;
+    backdrop-filter: blur(10px);
+    flex-wrap: wrap;
+    align-items: center;
+}
+
+.search-box {
+    flex: 1;
+    min-width: 250px;
+    position: relative;
+    display: flex;
+    align-items: center;
+}
+
+.search-box svg {
+    position: absolute;
+    left: 1rem;
+    width: 18px;
+    height: 18px;
+    color: var(--text-muted);
+    pointer-events: none;
+}
+
+.search-input {
+    width: 100%;
+    padding: 0.75rem 1rem 0.75rem 2.5rem;
+    background: rgba(15, 23, 42, 0.5);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: 8px;
+    color: var(--text-primary);
+    font-size: 0.95rem;
+    transition: all 0.2s;
+}
+
+.search-input:focus {
+    outline: none;
+    border-color: var(--primary);
+    box-shadow: 0 0 15px rgba(37, 99, 235, 0.15);
+}
+
+.filter-group {
+    display: flex;
+    gap: 0.75rem;
+    flex-wrap: wrap;
+}
+
+.filter-select {
+    padding: 0.75rem 1rem;
+    background: rgba(15, 23, 42, 0.5);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: 8px;
+    color: var(--text-primary);
+    font-size: 0.95rem;
+    cursor: pointer;
+    transition: all 0.2s;
+}
+
+.filter-select:focus {
+    outline: none;
+    border-color: var(--primary);
+}
+
+.contracts-view {
+    display: grid;
+    gap: 1rem;
+}
+
+.table-container {
+    background: rgba(30, 41, 59, 0.6);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: 12px;
+    overflow: horizontal;
+    backdrop-filter: blur(10px);
+}
+
+.contracts-table {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+.contracts-table thead {
+    background: rgba(15, 23, 42, 0.5);
+    border-bottom: 2px solid rgba(255, 255, 255, 0.1);
+}
+
+.contracts-table th {
+    padding: 1rem;
+    text-align: left;
+    font-weight: 600;
+    color: var(--text-secondary);
+    font-size: 0.875rem;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+.contracts-table tbody tr {
+    border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+    transition: all 0.2s;
+}
+
+.contracts-table tbody tr:hover {
+    background: rgba(102, 126, 234, 0.1);
+}
+
+.contracts-table tbody tr:last-child {
+    border-bottom: none;
+}
+
+.contracts-table td {
+    padding: 1rem;
+    color: var(--text-primary);
+}
+
+.contracts-table .status-cell {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.status-badge {
+    padding: 0.4rem 0.8rem;
+    border-radius: 8px;
+    font-size: 0.8rem;
+    font-weight: 600;
+    text-transform: capitalize;
+}
+
+.status-badge.extracted {
+    background: rgba(59, 130, 246, 0.15);
+    color: #60a5fa;
+    border: 1px solid rgba(59, 130, 246, 0.3);
+}
+
+.status-badge.confirmed {
+    background: rgba(16, 185, 129, 0.15);
+    color: #6ee7b7;
+    border: 1px solid rgba(16, 185, 129, 0.3);
+}
+
+.action-cell {
+    display: flex;
+    gap: 0.5rem;
+}
+
+.btn-sm {
+    padding: 0.5rem 1rem;
+    font-size: 0.875rem;
+    border: none;
+    border-radius: 6px;
+    cursor: pointer;
+    transition: all 0.2s;
+    background: transparent;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    color: var(--text-secondary);
+}
+
+.btn-sm:hover {
+    background: rgba(102, 126, 234, 0.1);
+    border-color: var(--primary);
+    color: var(--primary);
+}
+
+.contracts-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+    gap: 1rem;
+}
+
+.contract-card {
+    background: rgba(30, 41, 59, 0.6);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: 12px;
+    padding: 1.5rem;
+    cursor: pointer;
+    transition: all 0.3s;
+    backdrop-filter: blur(10px);
+}
+
+.contract-card:hover {
+    border-color: rgba(102, 126, 234, 0.5);
+    transform: translateY(-2px);
+    box-shadow: 0 8px 24px rgba(102, 126, 234, 0.15);
+}
+
+.contract-card-header {
+    display: flex;
+    align-items: flex-start;
+    gap: 0.75rem;
+    margin-bottom: 1rem;
+}
+
+.contract-card-icon {
+    width: 40px;
+    height: 40px;
+    background: linear-gradient(135deg, rgba(102, 126, 234, 0.2), rgba(118, 75, 162, 0.1));
+    border-radius: 8px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: var(--primary);
+    flex-shrink: 0;
+}
+
+.contract-card-icon svg {
+    width: 20px;
+    height: 20px;
+}
+
+.contract-card-title {
+    flex: 1;
+}
+
+.contract-card-title h3 {
+    font-size: 1rem;
+    margin-bottom: 0.25rem;
+    word-break: break-word;
+}
+
+.contract-card-title p {
+    font-size: 0.875rem;
+    color: var(--text-muted);
+}
+
+.contract-card-meta {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding-top: 1rem;
+    border-top: 1px solid rgba(255, 255, 255, 0.05);
+}
+
+.card-date {
+    font-size: 0.85rem;
+    color: var(--text-secondary);
+}
+
+.empty-state {
+    text-align: center;
+    padding: 3rem 1rem;
+    background: rgba(255, 255, 255, 0.05);
+    border: 1px dashed rgba(255, 255, 255, 0.1);
+    border-radius: 12px;
+}
+
+.empty-state svg {
+    width: 48px;
+    height: 48px;
+    margin: 0 auto 1rem;
+    opacity: 0.4;
+}
+
+.empty-state h3 {
+    margin-bottom: 0.5rem;
+}
+
+.empty-state p {
+    color: var(--text-secondary);
+    margin-bottom: 1.5rem;
+}
+
+.loading-spinner {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 3rem;
+    color: var(--text-secondary);
+}
+
+.spinner {
+    width: 32px;
+    height: 32px;
+    border: 3px solid rgba(102, 126, 234, 0.2);
+    border-top-color: var(--primary);
+    border-radius: 50%;
+    animation: spin 0.8s linear infinite;
+    margin-bottom: 1rem;
+}
+
+@keyframes spin {
+    to { transform: rotate(360deg); }
+}
+
+@media (max-width: 768px) {
+    .filter-bar {
+        flex-direction: column;
+    }
+
+    .search-box {
+        width: 100%;
+    }
+
+    .filter-group {
+        width: 100%;
+    }
+
+    .filter-select,
+    .btn-sm {
+        flex: 1;
+    }
+
+    #tableView {
+        display: none;
+    }
+
+    .contracts-grid {
+        grid-template-columns: 1fr;
+    }
+}
+
+@media (min-width: 769px) {
+    #gridView {
+        display: none;
+    }
+}
+</style>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    const searchInput = document.getElementById('searchInput');
+    const statusFilter = document.getElementById('statusFilter');
+    const refreshBtn = document.getElementById('refreshBtn');
+
+    searchInput.addEventListener('input', filterContracts);
+    statusFilter.addEventListener('change', filterContracts);
+    refreshBtn.addEventListener('click', loadContracts);
+
+    function filterContracts() {
+        const searchTerm = searchInput.value.toLowerCase();
+        const statusTerm = statusFilter.value;
+        const rows = document.querySelectorAll('#contractsTableBody tr:not(.empty-row)');
+        const cards = document.querySelectorAll('.contract-card');
+
+        rows.forEach(row => {
+            const filename = row.cells[0].textContent.toLowerCase();
+            const status = row.cells[2].textContent.toLowerCase();
+            const matches = filename.includes(searchTerm) && (!statusTerm || status.includes(statusTerm));
+            row.style.display = matches ? '' : 'none';
+        });
+
+        cards.forEach(card => {
+            const filename = card.querySelector('h3').textContent.toLowerCase();
+            const badge = card.querySelector('.status-badge');
+            const status = badge ? badge.textContent.toLowerCase() : '';
+            const matches = filename.includes(searchTerm) && (!statusTerm || status.includes(statusTerm));
+            card.style.display = matches ? '' : 'none';
+        });
+    }
+});
+</script>
+{% endblock %}

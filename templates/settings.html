@@ -1,0 +1,518 @@
+{% extends "base.html" %}
+
+{% block title %}Settings - Contract Processing Platform{% endblock %}
+{% block page_title %}Settings and Configuration{% endblock %}
+
+{% block content %}
+<div class="settings-container">
+    <!-- Settings Navigation Tabs -->
+    <div class="settings-tabs">
+        <button class="tab-btn active" data-tab="general">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <circle cx="12" cy="12" r="3"/>
+                <path d="M12 1v6m0 6v6M4.22 4.22l4.24 4.24m5.08 5.08l4.24 4.24M1 12h6m6 0h6M4.22 19.78l4.24-4.24m5.08-5.08l4.24-4.24"/>
+            </svg>
+            General
+        </button>
+        <button class="tab-btn" data-tab="integration">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <path d="M12 5v14M5 12h14"/>
+            </svg>
+            Integrations
+        </button>
+        <button class="tab-btn" data-tab="security">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/>
+            </svg>
+            Security
+        </button>
+        <button class="tab-btn" data-tab="about">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <circle cx="12" cy="12" r="10"/>
+                <line x1="12" y1="16" x2="12" y2="12"/>
+                <line x1="12" y1="8" x2="12.01" y2="8"/>
+            </svg>
+            About
+        </button>
+    </div>
+
+    <!-- General Settings -->
+    <div class="tab-content active" id="general">
+        <div class="settings-card">
+            <h3>Application Settings</h3>
+            <p class="section-description">Manage your application preferences</p>
+
+            <div class="settings-group">
+                <label class="setting-item">
+                    <div class="setting-info">
+                        <h4>Dark Mode</h4>
+                        <p>Always enabled for this application</p>
+                    </div>
+                    <input type="checkbox" class="toggle-switch" checked disabled>
+                </label>
+
+                <label class="setting-item">
+                    <div class="setting-info">
+                        <h4>Auto-refresh History</h4>
+                        <p>Automatically refresh contract list</p>
+                    </div>
+                    <input type="checkbox" class="toggle-switch" checked>
+                </label>
+
+                <label class="setting-item">
+                    <div class="setting-info">
+                        <h4>Email Notifications</h4>
+                        <p>Receive updates on contract processing</p>
+                    </div>
+                    <input type="checkbox" class="toggle-switch">
+                </label>
+            </div>
+        </div>
+
+
+    </div>
+
+    <!-- Integration Settings -->
+    <div class="tab-content" id="integration">
+        <div class="settings-card">
+            <h3>Chargebee Integration</h3>
+            <p class="section-description">Configure your Chargebee account connection</p>
+
+            <div class="info-box info-blue">
+                <svg viewBox="0 0 24 24" fill="currentColor">
+                    <circle cx="12" cy="12" r="10"/>
+                    <line x1="12" y1="16" x2="12" y2="12"/>
+                    <line x1="12" y1="8" x2="12.01" y2="8"/>
+                </svg>
+                <div>
+                    <p><strong>Connection Status:</strong> Settings loaded from environment variables</p>
+                    <p>Contact your administrator to modify Chargebee configuration</p>
+                </div>
+            </div>
+
+            <div class="settings-group">
+                <div class="setting-item-readonly">
+                    <div class="setting-info">
+                        <h4>Chargebee Site</h4>
+                        <p>Your Chargebee account site identifier</p>
+                    </div>
+                    <input type="text" class="form-input" placeholder="e.g., your-site" disabled>
+                </div>
+
+                <div class="setting-item-readonly">
+                    <div class="setting-info">
+                        <h4>API Status</h4>
+                        <p>Current connection status</p>
+                    </div>
+                    <div class="api-status">
+                        <span class="status-indicator connected"></span>
+                        <span>Connected</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="settings-card">
+            <h3>AI Settings</h3>
+            <p class="section-description">Manage AI extraction configuration</p>
+
+            <div class="settings-group">
+                <div class="setting-item-readonly">
+                    <div class="setting-info">
+                        <h4>AI Model</h4>
+                        <p>Current language model in use</p>
+                    </div>
+                    <input type="text" class="form-input" value="Gemini 1.5 Pro" disabled>
+                </div>
+
+                <div class="setting-item-readonly">
+                    <div class="setting-info">
+                        <h4>Max File Size</h4>
+                        <p>Maximum PDF file size accepted</p>
+                    </div>
+                    <input type="text" class="form-input" value="16 MB" disabled>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Security Settings -->
+    <div class="tab-content" id="security">
+        <div class="settings-card">
+            <h3>Authentication</h3>
+            <p class="section-description">Manage your account security</p>
+
+            <div class="warning-box">
+                <svg viewBox="0 0 24 24" fill="currentColor">
+                    <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 18c-4.42 0-8-3.58-8-8s3.58-8 8-8 8 3.58 8 8-3.58 8-8 8zm3.5-9c.83 0 1.5-.67 1.5-1.5S16.33 8 15.5 8 14 8.67 14 9.5s.67 1.5 1.5 1.5zm-7 0c.83 0 1.5-.67 1.5-1.5S9.33 8 8.5 8 7 8.67 7 9.5 7.67 11 8.5 11zm3.5 6.5c2.33 0 4.31-1.46 5.11-3.5H6.89c.8 2.04 2.78 3.5 5.11 3.5z"/>
+                </svg>
+                <div>
+                    <p><strong>Session Security:</strong> Your session is protected with secure authentication</p>
+                </div>
+            </div>
+
+            <div class="settings-group">
+                <div class="setting-item">
+                    <div class="setting-info">
+                        <h4>Change PIN</h4>
+                        <p>Update your authentication PIN</p>
+                    </div>
+                    <button class="btn btn-secondary btn-sm">Change</button>
+                </div>
+
+                <div class="setting-item">
+                    <div class="setting-info">
+                        <h4>Clear Session</h4>
+                        <p>Log out from all devices</p>
+                    </div>
+                    <button class="btn btn-secondary btn-sm">Clear</button>
+                </div>
+            </div>
+        </div>
+
+        <div class="settings-card danger-card">
+            <h3>Danger Zone</h3>
+            <p class="section-description">Irreversible actions</p>
+
+            <div class="settings-group">
+                <div class="setting-item">
+                    <div class="setting-info">
+                        <h4>Delete All Data</h4>
+                        <p>Permanently delete all processed contracts</p>
+                    </div>
+                    <button id="settingsDeleteBtn" class="btn btn-danger btn-sm">Delete</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- About Section -->
+    <div class="tab-content" id="about">
+        <div class="settings-card">
+            <h3>Contract Processing Platform</h3>
+
+            <div class="about-content">
+                <div class="about-section">
+                    <h4>Version</h4>
+                    <p>1.0.0</p>
+                </div>
+
+                <div class="about-section">
+                    <h4>Technology Stack</h4>
+                    <ul>
+                        <li>Backend: Flask (Python)</li>
+                        <li>AI Engine: Google Gemini 1.5 Pro</li>
+                        <li>Document Processing: PyPDF</li>
+                        <li>Integration: Chargebee API</li>
+                    </ul>
+                </div>
+
+                <div class="about-section">
+                    <h4>Features</h4>
+                    <ul>
+                        <li>✓ PDF contract extraction</li>
+                        <li>✓ AI-powered data recognition</li>
+                        <li>✓ Chargebee subscription creation</li>
+                        <li>✓ Multi-phase pricing support</li>
+                        <li>✓ Secure authentication</li>
+                    </ul>
+                </div>
+
+                <div class="about-section">
+                    <h4>Support</h4>
+                    <p>For issues or feature requests, please contact your administrator.</p>
+                </div>
+            </div>
+        </div>
+
+        <div class="settings-card">
+            <h3>Legal</h3>
+
+            <div class="links-list">
+                <a href="#" class="link-item">Privacy Policy</a>
+                <a href="#" class="link-item">Terms of Service</a>
+                <a href="#" class="link-item">Data Processing Agreement</a>
+            </div>
+        </div>
+    </div>
+</div>
+
+<style>
+.settings-container {
+    max-width: 900px;
+    margin: 0 auto;
+}
+
+.settings-tabs {
+    display: flex;
+    gap: 0.5rem;
+    background: rgba(30, 41, 59, 0.6);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: 12px;
+    padding: 0.75rem;
+    margin-bottom: 2rem;
+    backdrop-filter: blur(10px);
+    flex-wrap: wrap;
+}
+
+.tab-btn {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 0.75rem 1.25rem;
+    background: transparent;
+    border: none;
+    color: var(--text-secondary);
+    cursor: pointer;
+    border-radius: 8px;
+    font-weight: 500;
+    font-size: 0.95rem;
+    transition: all 0.2s;
+}
+
+.tab-btn:hover {
+    color: var(--text-primary);
+    background: rgba(255, 255, 255, 0.05);
+}
+
+.tab-btn.active {
+    background: linear-gradient(135deg, rgba(102, 126, 234, 0.3), rgba(118, 75, 162, 0.2));
+    color: var(--text-primary);
+    border: 1px solid rgba(102, 126, 234, 0.4);
+}
+
+.tab-btn svg {
+    width: 18px;
+    height: 18px;
+}
+
+.tab-content {
+    display: none;
+    animation: fadeIn 0.3s ease-in;
+}
+
+.tab-content.active {
+    display: block;
+}
+
+@keyframes fadeIn {
+    from { opacity: 0; }
+    to { opacity: 1; }
+}
+
+.settings-card {
+    background: rgba(30, 41, 59, 0.6);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: 12px;
+    padding: 1.75rem;
+    margin-bottom: 1.5rem;
+    backdrop-filter: blur(10px);
+}
+
+.settings-card h3 {
+    margin-bottom: 0.5rem;
+    font-size: 1.1rem;
+}
+
+.section-description {
+    color: var(--text-secondary);
+    font-size: 0.95rem;
+    margin-bottom: 1.5rem;
+}
+
+.settings-group {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+}
+
+.setting-item,
+.setting-item-readonly {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 1rem;
+    background: rgba(15, 23, 42, 0.5);
+    border-radius: 8px;
+    transition: all 0.2s;
+}
+
+.setting-item:hover {
+    background: rgba(15, 23, 42, 0.7);
+}
+
+.setting-info h4 {
+    margin-bottom: 0.25rem;
+}
+
+.setting-info p {
+    font-size: 0.875rem;
+    color: var(--text-secondary);
+}
+
+.toggle-switch {
+    width: 48px;
+    height: 28px;
+    cursor: pointer;
+}
+
+.form-input:disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+}
+
+.api-status {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    font-size: 0.95rem;
+}
+
+.status-indicator {
+    width: 10px;
+    height: 10px;
+    border-radius: 50%;
+    background: rgba(239, 68, 68, 0.6);
+}
+
+.status-indicator.connected {
+    background: #6ee7b7;
+    box-shadow: 0 0 10px rgba(110, 231, 183, 0.4);
+}
+
+.info-box,
+.warning-box {
+    display: flex;
+    gap: 1rem;
+    align-items: flex-start;
+    padding: 1rem;
+    border-radius: 8px;
+    margin-bottom: 1.5rem;
+}
+
+.info-box {
+    background: rgba(59, 130, 246, 0.1);
+    border: 1px solid rgba(59, 130, 246, 0.2);
+    color: #60a5fa;
+}
+
+.warning-box {
+    background: rgba(239, 180, 141, 0.1);
+    border: 1px solid rgba(239, 180, 141, 0.2);
+    color: #fdba74;
+}
+
+.info-box svg,
+.warning-box svg {
+    width: 20px;
+    height: 20px;
+    flex-shrink: 0;
+    margin-top: 0.25rem;
+}
+
+.danger-card {
+    border: 1px solid rgba(239, 68, 68, 0.3);
+    background: rgba(239, 68, 68, 0.08);
+}
+
+.button-group-vertical {
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+}
+
+.btn-danger {
+    background: linear-gradient(135deg, rgba(239, 68, 68, 0.5), rgba(220, 38, 38, 0.4));
+    border: 1px solid rgba(239, 68, 68, 0.4);
+    color: #f87171;
+}
+
+.btn-danger:hover {
+    background: linear-gradient(135deg, rgba(239, 68, 68, 0.7), rgba(220, 38, 38, 0.6));
+}
+
+.about-content {
+    display: grid;
+    gap: 2rem;
+}
+
+.about-section {
+    border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+    padding-bottom: 1.5rem;
+}
+
+.about-section:last-child {
+    border-bottom: none;
+}
+
+.about-section h4 {
+    margin-bottom: 0.75rem;
+    color: var(--primary);
+}
+
+.about-section ul {
+    list-style: none;
+    padding: 0;
+}
+
+.about-section li {
+    padding: 0.5rem 0;
+    color: var(--text-secondary);
+}
+
+.links-list {
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+}
+
+.link-item {
+    color: var(--primary);
+    text-decoration: none;
+    font-weight: 500;
+    padding: 0.75rem 1rem;
+    border-radius: 6px;
+    transition: all 0.2s;
+}
+
+.link-item:hover {
+    background: rgba(102, 126, 234, 0.1);
+    color: var(--primary-hover);
+}
+
+@media (max-width: 768px) {
+    .settings-tabs {
+        overflow-x: auto;
+    }
+
+    .settings-card {
+        padding: 1.25rem;
+    }
+
+    .setting-item,
+    .setting-item-readonly {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 0.75rem;
+    }
+
+    .setting-item > *:last-child {
+        width: 100%;
+    }
+}
+</style>
+
+<script>
+document.querySelectorAll('.tab-btn').forEach(btn => {
+    btn.addEventListener('click', function() {
+        const tabId = this.getAttribute('data-tab');
+        
+        document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+        document.querySelectorAll('.tab-content').forEach(c => c.classList.remove('active'));
+        
+        this.classList.add('active');
+        document.getElementById(tabId).classList.add('active');
+    });
+});
+</script>
+{% endblock %}
